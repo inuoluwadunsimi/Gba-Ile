@@ -3,6 +3,7 @@
 import * as dotenv from 'dotenv'
 
 
+dotenv.config()
 
 
 export const config = {
@@ -10,7 +11,11 @@ export const config = {
     mongodb: {
       uri: <string>process.env.MONGODB_URI,
       collections: {
-       sample:'sample-collection'
+          user:'users',
+          userAuth: 'user-auths',
+          userVer: 'user-verification',
+          userToken: 'user-token'
+
       }
     },
     google: {

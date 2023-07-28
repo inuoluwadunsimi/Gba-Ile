@@ -1,17 +1,18 @@
-import swaggerJSDoc from 'swagger-jsdoc';
+const swaggerJSDoc = require('swagger-jsdoc');
 
+// options for the swagger docs
 const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'typescript-express boilerplate',
-      version: '1.0.0',
+      title: 'Gba-ile API Docs', // Title of the documentation
+      version: '1.0.0', // Version of the app
       description: 'Docs',
     },
   },
-
-  apis:['./spec/api.yaml']
+  // swaggerDefinition,
+  apis: ['./spec/api.yaml'],
 };
 
-
-export default swaggerJSDoc(options)
+// initialize swagger-jsdoc
+module.exports = swaggerJSDoc(options);
