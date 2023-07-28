@@ -1,0 +1,402 @@
+openapi: 3.0.0
+info:
+  title: Gba-Ile API docs
+  version: 1.0.0
+  description: Api specs for gba-ile housing solution
+paths:
+  /user/auth/signup/otp-request:
+    post:
+      summary: 'endpoint to send otp for signup maiil verification'
+      tags:
+        - onboarding
+      operationId: SignupOTPRequest
+      parameters:
+        - $ref: '#/components/parameters/DeviceID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref : '#/components/schemas/SignupOtpRequest'
+      responses:
+        200:
+          description: 'success'
+          content:
+            application/json:
+              schema:
+                $ref : '#/components/schemas/DefaultResponse'
+        400:
+          description: 'error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /user/auth/otp-verify/signup:
+    post:
+      summary: 'Signup : verify otp-request'
+      tags:
+        - onboarding
+      operationId: VerifySignupOTPrequest
+      parameters:
+        - $ref: '#/components/parameters/DeviceID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifySignupOTPRequest'
+      responses:
+        200:
+          description: 'Successful verification, a jwt token valid for 1 hour is sent so the client can send in user signup information'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        400:
+          description: 'otp details incorrect'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /user/auth/login:
+    post:
+      summary: 'Login: login and send login token'
+      tags:
+        - authentication
+      operationId: Login
+      parameters:
+        - $ref: '#/components/parameters/DeviceID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: 'Login successful'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        401:
+          description: 'Unauthorised'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+  /user/auth/verify-otp-deviceId:
+    post:
+      summary: 'Verify otp for new device logged in'
+      tags:
+        - authentication
+      operationId: Otp verification
+      parameters:
+        - $ref: '#/components/parameters/DeviceID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyDeviceIDRequest'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+        401:
+          description: 'Invalid credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /user/auth/forgotpassword/otp-request:
+    post:
+      tags:
+        - authentication
+      operationId: ForgotPasswordOtpRequest
+      summary: 'Endpoint to request top when user forgets their password'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordOtpRequest'
+      responses:
+        200:
+          description: 'Otp '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+
+  /user/auth/forgotpassword/otp-verify:
+    post:
+      tags:
+        - authentication
+      operationId: ForgotPasswordOtpVerify
+      summary: 'Endpoint to verify user '
+      parameters:
+        - $ref: '#/components/parameters/DeviceID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordVerifyOtpRequest'
+      responses:
+        200:
+          description: 'Successful verification,a jwt valid for one hour is sent so client can use it to reset password '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        400:
+          description: 'Invalid credentials'
+          content:
+            application/json:
+              schema:
+               $ref: '#/components/schemas/ErrorResponse'
+
+
+  /user/auth/forgotpassword/password-reset:
+    post:
+      tags:
+        - authentication
+      operationId: PasswordReset
+      summary: 'endpoint to set new password after forgetting the old one'
+      parameters:
+        - $ref: '#/components/parameters/DeviceID'
+        - $ref: '#/components/parameters/AuthToken'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        401:
+          $ref: '#/components/schemas/ErrorResponse'
+
+  /user/auth/google-auth:
+    post:
+      summary: 'Endpoint for users to sign up'
+      tags:
+        - onboarding
+      operationId: AuthWithGoogle
+      parameters:
+        - $ref: '#/components/parameters/DeviceID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleAuthRequest'
+      responses:
+        200:
+          description:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        401:
+          description:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+components:
+  parameters:
+    DeviceID:
+      name: x-device-id
+      in: header
+      schema:
+        type: string
+      required: true
+
+    AuthToken:
+      name: x-auth-token
+      in: header
+      schema:
+        type: string
+      required: true
+
+
+  schemas:
+    ## Defaults/ generics
+    DefaultResponse:
+      title: DefaultResponse
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    ErrorResponse:
+      title: DefaultResponse
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      required:
+        - message
+
+    TokenResponse:
+      title: TokenResponse
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+        - token
+    #onboarding related schema
+    SignupOtpRequest:
+      title: SignupOtpRequest
+      example:
+        email: glouse.ng@gmail.com
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+        - email
+
+    VerifySignupOTPRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        otp:
+          type: string
+
+    SignupRequest:
+      type: object
+      properties:
+        fullName:
+          type: string
+        role:
+          type: string
+        phoneNumber:
+          type: string
+          pattern: '((^+)(234){1}[0–9]{10})|((^234)[0–9]{10})|((^0)(7|8|9){1}(0|1){1}[0–9]{8})'
+        password:
+          type: string
+          format: password
+          pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+
+
+    GoogleAuthRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        googleToken:
+          type: string
+
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+        role:
+          type: string
+
+    VerifyDeviceIDRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        otp:
+          type: string
+        trustDevice:
+          type: boolean
+
+    ForgotPasswordOtpRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+        - email
+
+    ForgotPasswordVerifyOtpRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        otp:
+          type: string
+
+    ResetPasswordRequest:
+      type: object
+      required:
+        - password
+      properties:
+        password:
+          type: string
+          format: password
+          pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+
+
+
+
+
+    #model schemas
+    User:
+      type: object
+      required:
+        - id
+        - fullName
+        - email
+      properties:
+        id:
+          type: string
+        fullName:
+          type: string
+        email:
+          type: string
+          format: email
+        userName:
+          type: string
+          uniqueItems: true
+        image:
+          type: string
+
+

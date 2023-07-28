@@ -2,14 +2,16 @@
   "devDependencies": {
     "@types/errorhandler": "^1.5.0",
     "@types/nodemon": "1.19.2",
-    "nodemon": "^2.0.22"
+    "nodemon": "2.0.22",
+    "typescript": "^5.1.6"
   },
-  "name": "backend-boilerplate",
-  "description": "A simple boiler plate to use to jump start a nodejs project",
+  "name": "Gba-Ile",
+  "description": "Api for gba-ile - a housing solution app",
   "version": "1.0.0",
   "main": "./src/entry/index.ts",
-  "type": "module",
-  "private": "true",
+  "engines": {
+    "node": "16.x"
+  },
   "dependencies": {
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.3",
@@ -68,8 +70,13 @@
     "webpack-node-externals": "^3.0.0"
   },
   "scripts": {
+    "precompile": "NODE_ENV= production",
+    "build": "tsc",
+    "build:dev": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node ./src/entry/index.ts",
+    "dev:start": "NODE_ENV=development  nodemon src/entry/index.ts",
+    "prod:start": "NODE_ENV=production nodemon src/entry/index.ts",
+    "start": "node ./dist/entry/index.js",
     "dev:start": "nodemon ./src/entry/index.ts"
   },
   "author": "",
