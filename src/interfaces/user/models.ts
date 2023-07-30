@@ -25,9 +25,10 @@ export interface UserToken extends  Document{
 export interface UserVer extends Document{
     id: string;
     email: string;
+    otp:number;
     deviceId: string;
     type: string;
-    expiresAt:string
+    expiresAt:Date
     createdAt: string;
     updatedAt: string;
 

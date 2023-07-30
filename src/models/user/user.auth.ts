@@ -65,4 +65,4 @@ const userAuth = new Schema<UserAuth>({
     versionKey: false,
 })
 
-const UserAuthDb = mongoose.model(config.mongodb.collections.userAuth,userAuth)
+export const UserAuthDb = mongoose.model(config.mongodb.collections.userAuth,userAuth)

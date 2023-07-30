@@ -10,3 +10,4 @@ export enum JwtType {
     USER = 'USER',
     ADMIN = 'ADMIN_USER'
 }
+

@@ -6,7 +6,6 @@ const specPath = './spec/api.yaml';
 if(!fs.existsSync('./spec/api.yaml')){
     throw new Error('Api spec path is not defined')
 
-
 }
 
 export const MainApiValidator = OpenApiValidator.middleware({

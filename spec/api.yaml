@@ -6,7 +6,7 @@ info:
 paths:
   /user/auth/signup/otp-request:
     post:
-      summary: 'endpoint to send otp for signup maiil verification'
+      summary: 'endpoint to send otp for signup mail verification'
       tags:
         - onboarding
       operationId: SignupOTPRequest
@@ -58,6 +58,31 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+  /user/auth/signup:
+    post:
+      summary: 'Signup: save signup details'
+      tags:
+        - onboarding
+      operationId: SignupWithToken
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/DeviceID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupRequest'
+      responses:
+        200:
+          description: 'Successful signup'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          $ref: '#/components/schemas/ErrorResponse'
 
   /user/auth/login:
     post:
@@ -202,29 +227,13 @@ paths:
               $ref: '#/components/schemas/GoogleAuthRequest'
       responses:
         200:
-          description:
+          description: "success"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TokenResponse'
         401:
-          description:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-
-
-
-
-
-
-
-
-
-
-
+          $ref: '#/components/schemas/ErrorResponse'
 
 
 
@@ -268,7 +277,7 @@ components:
         message:
           type: string
       required:
-        - message
+       - message
 
     TokenResponse:
       title: TokenResponse
@@ -304,15 +313,6 @@ components:
       properties:
         fullName:
           type: string
-        role:
-          type: string
-        phoneNumber:
-          type: string
-          pattern: '((^+)(234){1}[0–9]{10})|((^234)[0–9]{10})|((^0)(7|8|9){1}(0|1){1}[0–9]{8})'
-        password:
-          type: string
-          format: password
-          pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
 
 
     GoogleAuthRequest:
@@ -373,8 +373,6 @@ components:
           type: string
           format: password
           pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
-
-
 
 
 

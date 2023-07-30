@@ -20,7 +20,7 @@ const userVerSchema = new Schema<UserVer>(
             true: true,
         },
         otp: {
-            type: String,
+            type: Number,
             required: true,
         },
         deviceId: {
