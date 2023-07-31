@@ -8,10 +8,10 @@ import {UserTokenDb} from "../../models/user/user.token";
 
 interface GenerateTokenParam{
     email:string;
-    userId:string;
+    userId?:string;
     type:JwtType;
     deviceId:string,
-    expiresIn:number
+    expiresIn?:number
 
 };
 

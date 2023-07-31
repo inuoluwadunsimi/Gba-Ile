@@ -4,7 +4,7 @@ import {UserAuth, UserVer} from "../interfaces/user/models";
 import {BadRequestError} from "../interfaces";
 import {generateOtp} from "../helpers/utils";
 import {UserVerDb} from "../models/user/user.verification";
-import {OtpType} from "../interfaces/user/user.verfication";
+import {JwtType, OtpType} from "../interfaces/user/user.verfication";
 import {JwtHelper} from "../helpers/jwt/jwt.helper";
 import {config} from "../constants/settings";
 import {UserTokenDb} from "../models/user/user.token";
@@ -57,7 +57,7 @@ export async function signupOtpRequest(body:SignupOtpRequest):Promise<void>{
 }
 
 
-export async function verifySignupOtp(body:VerifyOtpRequest):Promise<void>{
+export async function verifySignupOtp(body:VerifyOtpRequest):Promise<string>{
     const {device,otp} = body
     let {email} = body
     email = email.toLowerCase()
@@ -76,7 +76,8 @@ export async function verifySignupOtp(body:VerifyOtpRequest):Promise<void>{
         throw new BadRequestError('Otp has expired');
     }
 
-   const token = jwtHelper.verifyToken()
-
+   const token = jwtHelper.generateToken({email,deviceId:device,type:JwtType.NEW_USER})
+    verification.deleteOne()
+    return token
 
 }
