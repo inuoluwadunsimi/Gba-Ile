@@ -40,6 +40,7 @@ export interface  User extends Document{
     fullName:string;
     userName:string
     avatar: string
+    createdAt: string;
     updatedAt: string
 
 }
